@@ -7,13 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                echo 'Clonando el repositorio...'
-                git 'https://github.com/alfosobral/playlist-proyecto-final-pa.git'
-            }
-        }
-
         stage('Build') {
             steps {
                 echo 'Compilando el proyecto...'
