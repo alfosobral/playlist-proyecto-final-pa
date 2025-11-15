@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "==============================="
+echo "Desplegando Mi Playlist"
+echo "==============================="
+cd "$(dirname "$0")/.."
+java -jar target/mi-playlist-0.0.1-SNAPSHOT.jar

@@ -3,20 +3,20 @@ pipeline {
 
     tools {
         maven 'Maven 3'
-        jdk 'JDK17'
+        jdk 'JDK 17'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Clonando repositorio...'
+                echo 'Clonando el repositorio...'
                 git 'https://github.com/alfosobral/playlist-proyecto-final-pa.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Construyendo el proyecto...'
+                echo 'Compilando el proyecto...'
                 bat 'mvn clean package -DskipTests'
             }
         }
@@ -30,18 +30,19 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Desplegando aplicación Spring Boot...'
-                bat 'java -jar target/mi-playlist-0.0.1-SNAPSHOT.jar'
+                echo 'Desplegando aplicación...'
+                bat 'scripts\\deploy_windows.bat'
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build completado correctamente'
+            echo 'Pipeline ejecutado correctamente'
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
         failure {
-            echo '❌ Error en el pipeline'
+            echo 'Error en el pipeline'
         }
     }
 }
