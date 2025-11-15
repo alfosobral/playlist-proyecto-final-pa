@@ -3,9 +3,12 @@ package com.playlist.pa.playlist_pa.controller;
 import com.playlist.pa.playlist_pa.model.Video;
 import com.playlist.pa.playlist_pa.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 public class VideoController {
@@ -40,14 +43,22 @@ public class VideoController {
     }
 
     @GetMapping("/like/{id}")
-    public String likeVideo(@PathVariable Long id) {
-        Video video = videoRepository.findById(id).orElse(null);
-        if (video != null) {
-            video.setLikes(video.getLikes() + 1);
-            videoRepository.save(video);
+    @ResponseBody
+    public int likeVideo(@PathVariable Long id) {
+        System.out.println("LIKE recibido para ID = " + id);
+        var video = videoRepository.findById(id).orElse(null);
+        if (video == null) {
+            System.out.println("No se encontró el video");
+            return -1;
         }
-        return "redirect:/";
+
+        int nuevosLikes = video.getLikes() + 1;
+        video.setLikes(nuevosLikes);
+        videoRepository.save(video);
+        System.out.println("Likes actualizados a " + nuevosLikes);
+        return nuevosLikes;
     }
+
 
     @GetMapping("/fav/{id}")
     public String toggleFav(@PathVariable Long id) {
