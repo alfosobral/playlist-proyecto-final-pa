@@ -70,6 +70,34 @@ public class VideoController {
         return "redirect:/";
     }
 
+/*
+    private Video getVideo(Long id) {
+        return videoRepository.findById(id).orElse(null);
+    }
+
+    @GetMapping("/like/{id}")
+    @ResponseBody
+    public int like(@PathVariable Long id) {
+        var video = getVideo(id);
+        if (video == null) return -1;
+        video.setLikes(video.getLikes() + 1);
+        videoRepository.save(video);
+        return video.getLikes();
+    }
+
+    @GetMapping("/fav/{id}")
+    public String fav(@PathVariable Long id) {
+        var video = getVideo(id);
+        if (video != null) {
+            video.setFav(!video.isFav());
+            videoRepository.save(video);
+        }
+        return "redirect:/";
+    }
+
+ */
+
+
     private String normalizarUrl(String url) {
         String embedUrl = url;
 
