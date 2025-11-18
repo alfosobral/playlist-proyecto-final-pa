@@ -23,7 +23,7 @@ public class VideoController {
     }
 
     @PostMapping("/add")
-    public String addVideo(@RequestParam String title, @RequestParam String url) {// Convertir URL de YouTube a formato embed
+    public String addVideo(@RequestParam String title, @RequestParam String url) {
         String embedUrl = normalizarUrl(url);
 
         Video newVideo = new Video();
@@ -71,7 +71,7 @@ public class VideoController {
         if (video == null) return "error";
         video.setTitle(title);
         videoRepository.save(video);
-        return "ok";
+        return "redirect:/";
     }
 
 /*
