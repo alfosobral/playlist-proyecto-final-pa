@@ -42,6 +42,7 @@ public class VideoController {
         return "redirect:/";
     }
 
+    /*
     @GetMapping("/like/{id}")
     @ResponseBody
     public String toggleLike(@PathVariable Long id) {
@@ -74,19 +75,22 @@ public class VideoController {
         return "redirect:/";
     }
 
-/*
+     */
+
+
     private Video getVideo(Long id) {
         return videoRepository.findById(id).orElse(null);
     }
 
     @GetMapping("/like/{id}")
     @ResponseBody
-    public int like(@PathVariable Long id) {
+    public String like(@PathVariable Long id) {
         var video = getVideo(id);
-        if (video == null) return -1;
-        video.setLikes(video.getLikes() + 1);
-        videoRepository.save(video);
-        return video.getLikes();
+        if (video != null) {
+            video.setFav(!video.isFav());
+            videoRepository.save(video);
+        }
+        return "redirect:/";
     }
 
     @GetMapping("/fav/{id}")
@@ -109,7 +113,6 @@ public class VideoController {
         return "ok";
     }
 
- */
 
     private String normalizarUrl(String url) {
         String embedUrl = url;
