@@ -11,7 +11,7 @@ public class Video {
 
     private String title;
     private String url;
-    private int likes;
+    private boolean liked;
     private boolean fav;
 
     public Video() {}
@@ -19,7 +19,7 @@ public class Video {
     public Video(String titulo, String url) {
         this.title = titulo;
         this.url = url;
-        this.likes = 0;
+        this.liked = false;
         this.fav = false;
     }
 
@@ -33,8 +33,8 @@ public class Video {
     public String getUrl() { return url; }
     public void setUrl(String url) { this.url = url; }
 
-    public int getLikes() { return likes; }
-    public void setLikes(int likes) { this.likes = likes; }
+    public boolean isLiked() { return liked; }
+    public void setLiked(boolean b) { this.liked = b; }
 
     public boolean isFav() { return fav; }
     public void setFav(boolean fav) { this.fav = fav; }

@@ -29,7 +29,7 @@ public class VideoController {
         Video newVideo = new Video();
         newVideo.setTitle(title);
         newVideo.setUrl(embedUrl);
-        newVideo.setLikes(0);
+        newVideo.setLiked(false);
         newVideo.setFav(false);
 
         videoRepository.save(newVideo);
@@ -44,19 +44,13 @@ public class VideoController {
 
     @GetMapping("/like/{id}")
     @ResponseBody
-    public int likeVideo(@PathVariable Long id) {
-        System.out.println("LIKE recibido para ID = " + id);
+    public String toggleLike(@PathVariable Long id) {
         var video = videoRepository.findById(id).orElse(null);
-        if (video == null) {
-            System.out.println("No se encontró el video");
-            return -1;
+        if (video != null) {
+            video.setLiked(!video.isLiked());
+            videoRepository.save(video);
         }
-
-        int nuevosLikes = video.getLikes() + 1;
-        video.setLikes(nuevosLikes);
-        videoRepository.save(video);
-        System.out.println("Likes actualizados a " + nuevosLikes);
-        return nuevosLikes;
+        return "redirect:/";
     }
 
 
@@ -68,6 +62,16 @@ public class VideoController {
             videoRepository.save(video);
         }
         return "redirect:/";
+    }
+
+    @PatchMapping("/edit/{id}")
+    @ResponseBody
+    public String updateTitle(@PathVariable Long id, @RequestParam String title) {
+        var video = videoRepository.findById(id).orElse(null);
+        if (video == null) return "error";
+        video.setTitle(title);
+        videoRepository.save(video);
+        return "ok";
     }
 
 /*
@@ -95,8 +99,17 @@ public class VideoController {
         return "redirect:/";
     }
 
- */
+    @PatchMapping("/edit/{id}")
+    @ResponseBody
+    public String updateTitle(@PathVariable Long id, @RequestParam String title) {
+        var video = getVideo(id);
+        if (video == null) return "error";
+        video.setTitle(title);
+        videoRepository.save(video);
+        return "ok";
+    }
 
+ */
 
     private String normalizarUrl(String url) {
         String embedUrl = url;

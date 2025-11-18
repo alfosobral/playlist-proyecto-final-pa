@@ -3,161 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Playlist Proyecto Final PA</title>
+
+    <!-- Bootstrap + Fuente -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         body {
-          background: linear-gradient(135deg, #0b0b0b, #121212);
-          color: #e4e4e4;
-          font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0b0b0b, #121212);
+            color: #e4e4e4;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Navbar */
+        /* NAVBAR */
         .navbar {
-          background: rgba(18,18,18,0.9);
-          border-bottom: 1px solid #00f2ff30;
-          box-shadow: 0 0 15px #00f2ff40;
+            background: rgba(18,18,18,0.9);
+            border-bottom: 1px solid #00f2ff30;
+            box-shadow: 0 0 15px #00f2ff40;
         }
         .navbar-brand {
-          color: #00f2ff !important;
-          font-weight: 600;
-          letter-spacing: 1px;
-          transition: 0.3s;
+            color: #00f2ff !important;
+            font-weight: 600;
+            transition: 0.3s;
         }
         .navbar-brand:hover {
-          color: #fff !important;
-          text-shadow: 0 0 10px #00f2ff;
+            color: #fff !important;
+            text-shadow: 0 0 10px #00f2ff;
         }
 
-        /* Formulario */
-        .add-card {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid #00f2ff20;
-          border-radius: 15px;
-          padding: 1.5rem;
-          backdrop-filter: blur(5px);
-          box-shadow: 0 0 15px #00f2ff15;
+        /* TARJETA DE FORMULARIO */
+        .add-card,
+        .video-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #00f2ff20;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #00f2ff20;
         }
 
-        ::placeholder {
-          color: #77faff;            /* azul cian claro */
-          opacity: 0.9;
-        }
-
-        ::-webkit-input-placeholder {
-          color: #aaa;
-        }
-        :-ms-input-placeholder {
-          color: #aaa;
-        }
-        ::-ms-input-placeholder {
-          color: #aaa;
-        }
-
+        /* INPUTS */
         input.form-control {
-          background-color: #1f1f1f;
-          color: #e4e4e4;
-          border: none;
+            background-color: #1f1f1f;
+            color: #e4e4e4;
+            border: none;
         }
         input.form-control:focus {
-          box-shadow: 0 0 10px #00f2ff90;
+            box-shadow: 0 0 10px #00f2ff90;
         }
+        input::placeholder {
+             color: #bdfdff !important;
+             opacity: 1;
+        }
+        input:focus::placeholder {
+            color: #00f2ff !important;
 
+        /* BOTONES */
         .btn-primary {
-          background-color: #00f2ff;
-          border: none;
-          color: #000;
-          font-weight: 600;
-          transition: 0.2s;
+            background-color: #00f2ff;
+            border: none;
+            color: #000;
+            font-weight: 600;
+            transition: 0.2s;
         }
         .btn-primary:hover {
-          background-color: #00c2cc;
-          box-shadow: 0 0 15px #00f2ff;
+            background-color: #00c2cc;
+            box-shadow: 0 0 15px #00f2ff;
         }
 
-        /* Cards */
+        .btn-outline-success:hover { background: #00f2ff; color: #000; }
+        .btn-outline-warning:hover { background: #ffc107; color: #000; }
+        .btn-danger:hover { background: #ff003c; }
+
+        /* TARJETA VIDEO */
         .video-card {
-          background: rgba(255,255,255,0.05);
-          border: 1px solid #00f2ff15;
-          border-radius: 15px;
-          overflow: hidden;
-          transition: transform 0.3s, box-shadow 0.3s;
-          box-shadow: 0 0 20px #00000050;
-          animation: fadeInUp 0.6s ease;
+            overflow: hidden;
+            transition: 0.3s;
         }
         .video-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 0 25px #00f2ff30;
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px #00f2ff40;
         }
 
-        iframe {
-          border-radius: 10px;
-        }
-
-        .btn-outline-success, .btn-outline-warning, .btn-danger {
-          border: none;
-          font-weight: 600;
-          transition: 0.2s;
-        }
-
-        .btn-outline-success:hover {
-          background: #00f2ff;
-          color: #000;
-        }
-
-        .btn-outline-warning:hover {
-          background: #ffc107;
-          color: #000;
-        }
-
-        .btn-danger:hover {
-          background: #ff003c;
-          box-shadow: 0 0 10px #ff003c80;
-        }
-
-        .fav-icon {
-          font-size: 1.2rem;
-          transition: 0.3s;
-        }
-        .fav-icon.active {
-          color: #ffc107;
-          text-shadow: 0 0 10px #ffc10790;
-        }
-        .fav-icon:hover {
-          transform: scale(1.2);
-        }
-
-        /* Animaciones */
-        @keyframes pulse-like {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.4); text-shadow: 0 0 10px #00f2ff; }
-          100% { transform: scale(1); }
-        }
-        @keyframes sparkle-fav {
-          0% { transform: rotate(0deg) scale(1); color: #ffc107; text-shadow: 0 0 10px #ffc107; }
-          25% { transform: rotate(15deg) scale(1.3); }
-          50% { transform: rotate(-15deg) scale(1.3); }
-          100% { transform: rotate(0deg) scale(1); color: #ffc107; }
-        }
-        .like-animate { animation: pulse-like 0.4s ease; }
-        .fav-icon.animate { animation: sparkle-fav 0.5s ease; }
+        .fav-icon.active { color: #ffc107; }
+        .like-icon.active { color: #00f2ff; }
     </style>
 </head>
 
 <body>
-<!-- Navbar -->
+
+<!-- NAV -->
 <nav class="navbar navbar-expand-lg mb-4 px-3">
     <a class="navbar-brand" href="/">🎧 Playlist Proyecto Final PA</a>
 </nav>
 
 <div class="container">
 
-    <!-- Formulario -->
-    <div class="add-card mb-5">
+    <!-- FORM -->
+    <div class="add-card p-4 mb-5">
         <form action="/add" method="post" class="row g-2">
             <div class="col-md-5">
                 <input class="form-control" type="text" name="title" placeholder="Título del video" required>
@@ -171,89 +112,122 @@
         </form>
     </div>
 
-    <!-- Favoritos -->
+    <!-- FAVORITOS -->
     <div th:if="${!#lists.isEmpty(videos)}" class="mb-5">
-        <h4 class="text-info mb-4">⭐ Tus Favoritos</h4>
+        <h4 class="text-info mb-4">⭐ Favoritos</h4>
+
         <div class="row">
             <div class="col-md-4 mb-4" th:each="v : ${videos}" th:if="${v.fav}">
                 <div class="video-card p-3 border border-info">
                     <h5 th:text="${v.title}" class="mb-3 text-info"></h5>
-                    <iframe width="100%" height="200" th:src="${v.url}" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="100%" height="200" th:src="${v.url}" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Lista vacía -->
+    <!-- LISTA VACÍA -->
     <div th:if="${#lists.isEmpty(videos)}" class="text-center mt-5">
-        <h5 class="text-muted">No hay videos todavía... 🎬</h5>
+        <h5 class="text-muted">No hay videos todavía...</h5>
     </div>
 
-    <!-- Cards -->
+    <!-- VIDEOS -->
     <div class="row" th:if="${!#lists.isEmpty(videos)}">
         <div class="col-md-4 mb-4" th:each="v : ${videos}">
             <div class="video-card p-3 h-100">
-                <h5 th:text="${v.title}" class="mb-3"></h5>
-                <iframe width="100%" height="200" th:src="${v.url}" frameborder="0" allowfullscreen></iframe>
+
+                <h5 class="video-title mb-3"
+                    th:text="${v.title}"
+                    th:attr="data-id=${v.id}"
+                    ondblclick="enableEdit(this)">
+                </h5>
+
+                <iframe width="100%" height="200" th:src="${v.url}" allowfullscreen></iframe>
+
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div>
-                        <!-- LIKE -->
-                        <th:button class="btn btn-outline-success btn-sm me-2"
-                                   th:onclick="'likeOnce(event,' + ${v.id} + ', this)'">
-                            👍 <span th:text="${v.likes}"></span>
-                        </th:button>
+                        <button class="btn btn-outline-success btn-sm me-2"
+                                th:attr="data-id=${v.id}"
+                                onclick="toggleLike(event, this)">
+                            <span class="like-icon" th:classappend="${v.liked} ? ' active' : ''">👍</span>
+                        </button>
 
-
-
-                        <!-- FAV -->
                         <button class="btn btn-outline-warning btn-sm"
-                                th:attr="data-id=${v.id}, data-fav=${v.fav}"
+                                th:attr="data-id=${v.id}"
                                 onclick="toggleFav(event, this)">
-                            <span class="fav-icon" th:classappend="${v.fav} ? 'active' : ''">⭐</span>
+                            <span class="fav-icon" th:classappend="${v.fav} ? ' active' : ''">⭐</span>
                         </button>
                     </div>
+
                     <a th:href="@{'/delete/' + ${v.id}}" class="btn btn-danger btn-sm">🗑</a>
                 </div>
+
             </div>
         </div>
     </div>
+
 </div>
 
+<!-- JS -->
 <script>
-    function likeOnce(event, id, button) {
-      event.preventDefault();
-      const key = "liked_" + id;
-      if (localStorage.getItem(key)) {
-        alert("Ya le diste like a este video");
-        return;
-      }
-      localStorage.setItem(key, true);
+    function enableEdit(el) {
+        const id = el.dataset.id;
+        const oldTitle = el.textContent.trim();
 
-      fetch(`/like/${id}`, { method: "GET" })
-        .then(res => res.text())
-        .then(count => {
-          const span = button.querySelector("span");
-          span.textContent = count;
-          button.classList.add("btn-success", "like-animate");
-          button.classList.remove("btn-outline-success");
-          setTimeout(() => button.classList.remove("like-animate"), 400);
-        })
-        .catch(err => console.error("Error al dar like:", err));
+        const input = document.createElement("input");
+        input.className = "form-control form-control-sm";
+        input.value = oldTitle;
+
+        el.replaceWith(input);
+        input.focus();
+
+        const save = () => {
+            const newTitle = input.value.trim();
+            if (newTitle && newTitle !== oldTitle) {
+                fetch(`/edit/${id}?title=${encodeURIComponent(newTitle)}`, { method: "PATCH" })
+                    .then(res => res.text())
+                    .then(r => {
+                        const h5 = document.createElement("h5");
+                        h5.textContent = newTitle;
+                        h5.className = "video-title mb-3";
+                        h5.dataset.id = id;
+                        h5.ondblclick = () => enableEdit(h5);
+                        input.replaceWith(h5);
+                    })
+                    .catch(() => cancel());
+            } else cancel();
+        };
+
+        const cancel = () => {
+            const h5 = document.createElement("h5");
+            h5.textContent = oldTitle;
+            h5.className = "video-title mb-3";
+            h5.dataset.id = id;
+            h5.ondblclick = () => enableEdit(h5);
+            input.replaceWith(h5);
+        };
+
+        input.addEventListener("blur", save);
+        input.addEventListener("keydown", e => {
+            if (e.key === "Enter") save();
+            if (e.key === "Escape") cancel();
+        });
     }
 
-    function toggleFav(event, button) {
-      event.preventDefault();
-      const id = button.getAttribute("data-id");
+    function toggleLike(e, btn) {
+        e.preventDefault();
+        const icon = btn.querySelector(".like-icon");
+        icon.classList.toggle("active");
+        fetch(`/like/${btn.dataset.id}`);
+    }
 
-      fetch(`/fav/${id}`, { method: "GET" })
-        .then(() => {
-          const icon = button.querySelector(".fav-icon");
-          icon.classList.toggle("active");
-          icon.classList.add("animate");
-          setTimeout(() => icon.classList.remove("animate"), 500);
-        })
-        .catch(err => console.error("Error al marcar favorito:", err));
+    function toggleFav(e, btn) {
+        e.preventDefault();
+        const icon = btn.querySelector(".fav-icon");
+        icon.classList.toggle("active");
+        fetch(`/fav/${btn.dataset.id}`);
     }
 </script>
+
 </body>
 </html>
