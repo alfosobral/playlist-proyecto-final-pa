@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Playlist Proyecto Final PA</title>
 
-    <!-- Bootstrap + Fuente -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -31,7 +30,7 @@
             text-shadow: 0 0 10px #00f2ff;
         }
 
-        /* TARJETA DE FORMULARIO */
+        /* FORM CARD */
         .add-card,
         .video-card {
             background: rgba(255,255,255,0.05);
@@ -49,14 +48,18 @@
         input.form-control:focus {
             box-shadow: 0 0 10px #00f2ff90;
         }
+
+        /* PLACEHOLDERS */
         input::placeholder {
-             color: #bdfdff !important;
-             opacity: 1;
+            color: #bdfdff !important;
+            opacity: 1;
+            transition: 0.2s ease;
         }
         input:focus::placeholder {
             color: #00f2ff !important;
+        }
 
-        /* BOTONES */
+        /* BUTTONS */
         .btn-primary {
             background-color: #00f2ff;
             border: none;
@@ -69,11 +72,9 @@
             box-shadow: 0 0 15px #00f2ff;
         }
 
-        .btn-outline-success:hover { background: #00f2ff; color: #000; }
-        .btn-outline-warning:hover { background: #ffc107; color: #000; }
         .btn-danger:hover { background: #ff003c; }
 
-        /* TARJETA VIDEO */
+        /* VIDEO CARD */
         .video-card {
             overflow: hidden;
             transition: 0.3s;
@@ -83,14 +84,45 @@
             box-shadow: 0 0 20px #00f2ff40;
         }
 
-        .fav-icon.active { color: #ffc107; }
-        .like-icon.active { color: #00f2ff; }
+        /* LIKE/FAV VISIBLES */
+        .like-icon.active {
+            color: #00f2ff !important;
+            text-shadow: 0 0 10px #00f2ff80;
+        }
+
+        .fav-icon.active {
+            color: #ffc107 !important;
+            text-shadow: 0 0 10px #ffc10780;
+        }
+
+        /* Evitar que Bootstrap los pise */
+        .btn-outline-success .like-icon.active {
+            color: #00f2ff !important;
+        }
+        .btn-outline-warning .fav-icon.active {
+            color: #ffc107 !important;
+        }
+
+        /* LIKE ACTIVADO */
+        .btn-success {
+            background-color: #00f2ff !important;
+            border: none !important;
+            color: #000 !important;
+            box-shadow: 0 0 12px #00f2ff80;
+        }
+
+        /* FAV ACTIVADO */
+        .btn-warning {
+            background-color: #ffc107 !important;
+            border: none !important;
+            color: #000 !important;
+            box-shadow: 0 0 12px #ffc10780;
+        }
     </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav class="navbar navbar-expand-lg mb-4 px-3">
     <a class="navbar-brand" href="/">🎧 Playlist Proyecto Final PA</a>
 </nav>
@@ -131,7 +163,7 @@
         <h5 class="text-muted">No hay videos todavía...</h5>
     </div>
 
-    <!-- VIDEOS -->
+    <!-- LISTA DE VIDEOS -->
     <div class="row" th:if="${!#lists.isEmpty(videos)}">
         <div class="col-md-4 mb-4" th:each="v : ${videos}">
             <div class="video-card p-3 h-100">
@@ -146,13 +178,17 @@
 
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div>
-                        <button class="btn btn-outline-success btn-sm me-2"
+                        <!-- LIKE -->
+                        <button class="btn btn-sm me-2"
+                                th:classappend="${v.liked} ? ' btn-success' : ' btn-outline-success'"
                                 th:attr="data-id=${v.id}"
                                 onclick="toggleLike(event, this)">
                             <span class="like-icon" th:classappend="${v.liked} ? ' active' : ''">👍</span>
                         </button>
 
-                        <button class="btn btn-outline-warning btn-sm"
+                        <!-- FAV -->
+                        <button class="btn btn-sm"
+                                th:classappend="${v.fav} ? ' btn-warning' : ' btn-outline-warning'"
                                 th:attr="data-id=${v.id}"
                                 onclick="toggleFav(event, this)">
                             <span class="fav-icon" th:classappend="${v.fav} ? ' active' : ''">⭐</span>
@@ -173,8 +209,8 @@
     function enableEdit(el) {
         const id = el.dataset.id;
         const oldTitle = el.textContent.trim();
-
         const input = document.createElement("input");
+
         input.className = "form-control form-control-sm";
         input.value = oldTitle;
 
@@ -183,19 +219,18 @@
 
         const save = () => {
             const newTitle = input.value.trim();
-            if (newTitle && newTitle !== oldTitle) {
-                fetch(`/edit/${id}?title=${encodeURIComponent(newTitle)}`, { method: "PATCH" })
-                    .then(res => res.text())
-                    .then(r => {
-                        const h5 = document.createElement("h5");
-                        h5.textContent = newTitle;
-                        h5.className = "video-title mb-3";
-                        h5.dataset.id = id;
-                        h5.ondblclick = () => enableEdit(h5);
-                        input.replaceWith(h5);
-                    })
-                    .catch(() => cancel());
-            } else cancel();
+            if (!newTitle || newTitle === oldTitle) return cancel();
+
+            fetch(`/edit/${id}?title=${encodeURIComponent(newTitle)}`, { method: "PATCH" })
+                .then(() => {
+                    const h5 = document.createElement("h5");
+                    h5.textContent = newTitle;
+                    h5.className = "video-title mb-3";
+                    h5.dataset.id = id;
+                    h5.ondblclick = () => enableEdit(h5);
+                    input.replaceWith(h5);
+                })
+                .catch(cancel);
         };
 
         const cancel = () => {
@@ -214,19 +249,49 @@
         });
     }
 
-    function toggleLike(e, btn) {
-        e.preventDefault();
-        const icon = btn.querySelector(".like-icon");
-        icon.classList.toggle("active");
-        fetch(`/like/${btn.dataset.id}`);
+    function toggleLike(event, button) {
+        event.preventDefault();
+
+        const id = button.getAttribute("data-id");
+        const icon = button.querySelector(".like-icon");
+
+        fetch(`/like/${id}`, { method: "GET" })
+            .then(() => {
+                icon.classList.toggle("active");
+
+                // Toggle visual del botón
+                if (button.classList.contains("btn-outline-success")) {
+                    button.classList.remove("btn-outline-success");
+                    button.classList.add("btn-success");
+                } else {
+                    button.classList.remove("btn-success");
+                    button.classList.add("btn-outline-success");
+                }
+            });
     }
 
-    function toggleFav(e, btn) {
-        e.preventDefault();
-        const icon = btn.querySelector(".fav-icon");
-        icon.classList.toggle("active");
-        fetch(`/fav/${btn.dataset.id}`);
+
+    function toggleFav(event, button) {
+        event.preventDefault();
+
+        const id = button.getAttribute("data-id");
+        const icon = button.querySelector(".fav-icon");
+
+        fetch(`/fav/${id}`, { method: "GET" })
+            .then(() => {
+                icon.classList.toggle("active");
+
+                // Toggle visual del botón
+                if (button.classList.contains("btn-outline-warning")) {
+                    button.classList.remove("btn-outline-warning");
+                    button.classList.add("btn-warning");
+                } else {
+                    button.classList.remove("btn-warning");
+                    button.classList.add("btn-outline-warning");
+                }
+            });
     }
+
 </script>
 
 </body>
